@@ -1,6 +1,6 @@
 import {createClient} from '@supabase/supabase-js';
 const client=createClient('https://qulxvyrycjeasvokuzlq.supabase.co','sb_publishable_RtmbcXmwEQUXXpHO0ryYgQ_1UWAMWF5',{
- auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}
+ auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:true}
 });
 const element=id=>document.getElementById(id);
 const authorizationId=new URLSearchParams(location.search).get('authorization_id');
@@ -34,8 +34,8 @@ async function loadConsent(){
 element('send').addEventListener('click',()=>run(async()=>{
  const email=element('email').value.trim();
  if(!element('email').checkValidity() || !email)throw Error('email');
- const {error}=await client.auth.signInWithOtp({email,options:{shouldCreateUser:false}});
- if(error)throw error;say('Revisa tu correo personal y escribe el código.');
+ const {error}=await client.auth.signInWithOtp({email,options:{shouldCreateUser:false,emailRedirectTo:location.origin+location.pathname+'?authorization_id='+encodeURIComponent(authorizationId)}});
+ if(error)throw error;say('Abre el enlace de acceso recibido en tu correo personal. Volverás a esta página para revisar el consentimiento.');
 }));
 element('verify').addEventListener('click',()=>run(async()=>{
  const token=element('code').value.trim();element('code').value='';
