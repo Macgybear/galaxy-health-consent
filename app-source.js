@@ -18,7 +18,7 @@ async function run(action){
  finally{buttons.forEach(b=>b.disabled=false);}
 }
 async function loadConsent(){
- if(!authorizationId || !/^[0-9a-f-]{36}$/i.test(authorizationId)){say('Abre esta página desde la conexión OAuth de Galaxy Health en ChatGPT.');return;}
+ if(!authorizationId || !/^[A-Za-z0-9_-]{16,128}$/.test(authorizationId)){say('Abre esta página desde la conexión OAuth de Galaxy Health en ChatGPT.');return;}
  const {data:{user}}=await client.auth.getUser();
  if(!user){element('login').hidden=false;say('Inicia sesión con el correo personal autorizado.');return;}
  const {data,error}=await client.auth.oauth.getAuthorizationDetails(authorizationId);
